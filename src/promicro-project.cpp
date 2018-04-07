@@ -2,8 +2,17 @@
 #include "HID.h"
 #include "Keyboard.h"
 
+#ifndef I_AM_USING_QWERTY
+  #define ENTER_INSERT_MODE_KEY ('g')
+  #define MOVE_CURSOR_RIGHT_KEY (';')
+#else
+  #define ENTER_INSERT_MODE_KEY ('i')
+  #define MOVE_CURSOR_RIGHT_KEY ('l')
+#endif
+
+
+const int CLUTCH_PIN = 2;
 int previousButtonState = 0;
-int CLUTCH_PIN = 3;
 
 
 void setup()
@@ -11,6 +20,7 @@ void setup()
     pinMode(CLUTCH_PIN, INPUT_PULLUP);
     Keyboard.begin();
     Serial.begin(9600);
+    while(!Serial) {}
 }
 
 
@@ -24,13 +34,13 @@ void loop()
         {
             Serial.println("pressed");
             Keyboard.write(KEY_ESC);
-            Keyboard.write('g');
+            Keyboard.write(ENTER_INSERT_MODE_KEY);
         }
         else
         {
             Serial.println("released");
             Keyboard.write(KEY_ESC);
-            Keyboard.write(';');
+            Keyboard.write(MOVE_CURSOR_RIGHT_KEY);
         }
     }
 
