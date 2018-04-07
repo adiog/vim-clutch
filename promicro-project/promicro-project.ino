@@ -1,15 +1,42 @@
-#include <Arduino.h>
+#include "Arduino.h"
+#include "HID.h"
+#include "Keyboard.h"
 
-#define LED_PROMICRO 17
 
-void setup() {
-  pinMode(LED_PROMICRO, OUTPUT);
+void setup()
+{
+    pinMode(13, OUTPUT);
+    pinMode(3, INPUT_PULLUP);
+//    digitalWrite(2, HIGH);
+    Keyboard.begin();
+    Serial.begin(9600);
 }
 
-void loop() {
-  digitalWrite(LED_PROMICRO, HIGH);
-  delay(100);
-  digitalWrite(LED_PROMICRO, LOW);
-  delay(100);
-}
+int previousButtonState = 0;
+int buttonPin = 3;
 
+
+void loop()
+{
+    int buttonState = digitalRead(buttonPin) != 0;
+
+    if (buttonState != previousButtonState)
+    {
+        //Serial.println(millis());
+        if (buttonState)
+        {
+            Serial.println("pressed");
+            Keyboard.write(KEY_ESC);
+            Keyboard.write('g');
+        }
+        else
+        {
+            Serial.println("released");
+            Keyboard.write(KEY_ESC);
+            Keyboard.write(';');
+        }
+    }
+
+    previousButtonState = buttonState;
+    delay(5);
+}

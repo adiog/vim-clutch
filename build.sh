@@ -252,3 +252,20 @@ avrdude -C${ARDUINO_SDK_PATH}/etc/avrdude.conf -q -q -patmega32u4 -cavr109 -P${D
 
 echo "..done."
 
+set +e
+set +o xtrace
+
+echo "ProMicro Serial starts after about 20 seconds..."
+
+for i in `seq 5`;
+do
+  for i in `seq 4`;
+  do
+    echo -n "."
+    sleep 1
+  done
+  echo -n ","
+  sleep 1
+done
+echo ""
+
